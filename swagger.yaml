@@ -1,0 +1,715 @@
+swagger: "2.0"
+info:
+  description: "Policy Tool Service Swagger Specification."
+  version: "1.0.0"
+  title: "Policy Tool Service"
+  contact:
+    email: "soultos@protonmail.ch"
+
+schemes:
+- "http"
+
+host: localhost:8080
+
+consumes:
+  - application/json
+
+produces:
+  - application/json
+
+paths:
+  /category/{category}:
+    post:
+      tags:
+        - 'Category'
+      summary: Add new attribute in category
+      operationId: addAttribute
+      parameters:
+        - $ref: '#/parameters/Category'
+        - name: attribute
+          in: body
+          schema:
+            $ref: '#/definitions/Attribute'
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+          
+    get:
+      tags:
+        - 'Category'
+      summary: Get attributes for a category
+      operationId: getAttributes
+      parameters:
+        - $ref: '#/parameters/Category'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/Attribute'
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+  /category/{category}/{attributeId}:
+    get:
+      tags:
+        - 'Category'
+      summary: Get a category attribute
+      operationId: getAttribute
+      parameters:
+        - $ref: '#/parameters/Category'
+        - name: attributeId
+          in: path
+          description: Attribute ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Attribute'
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - 'Category'
+      summary: Delete a category attribute
+      operationId: deleteAttribute
+      parameters:
+        - $ref: '#/parameters/Category'
+        - name: attributeId
+          in: path
+          description: Attribute ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+  /abac:
+    post:
+      tags:
+        - 'ABAC'
+      summary: Add ABAC Policy
+      operationId: addABACPolicy
+      parameters:
+        - name: policy
+          in: body
+          schema:
+            $ref: '#/definitions/Policy'
+          required: true
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - 'ABAC'
+      summary: Get ABAC policies
+      operationId: getABACPolicies
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/Policy'
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+  /abac/{policyId}:
+    get:
+      tags:
+        - 'ABAC'
+      summary: Get ABAC Policy
+      operationId: getABACPolicy
+      parameters:
+        - name: policyId
+          in: path
+          description: Policy ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+    delete:
+      tags: 
+        - 'ABAC'
+      summary: Delete ABAC Policy
+      operationId: deleteABACPolicy
+      parameters:
+        - name: policyId
+          in: path
+          description: Policy ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+
+  /xacml/request:
+    get:
+      tags:
+        - 'XACML'
+      summary: Generate XACML request
+      operationId: generateXACMLRequest
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: XACML request
+            type: string
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+  /xacml/abac/{policyId}:
+    get:
+      tags:
+        - 'XACML'
+      summary: Generate ABAC policy
+      operationId: generateABACPolicy
+      parameters:
+        - name: policyId
+          in: path
+          type: string
+          description: Policy ID
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: XACML request
+            type: string
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+  /project:
+    post:
+      tags:
+        - 'Project'
+      summary: Load project
+      operationId: loadData
+      parameters:
+        - name: exportedData
+          in: body
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+    get:
+      tags:
+        - 'Project'
+      summary: Export poject
+      operationId: exportData
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: Exported data
+            type: string
+        '400':
+          description: Bad request
+          schema: 
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method not allowed
+          schema: 
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal server error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+parameters:
+  Category:
+    name: category
+    in: path
+    description: Category name
+    type: string
+    enum: ['act', 'env', 'rsc', 'subj']
+    required: true
+
+definitions:
+  Attribute:
+    type: object
+    properties:
+      attributeValues:
+        type: array
+        description: Attribute values
+        items:
+          $ref: '#/definitions/AttributeValueType'
+      attributeId:
+        type: string
+        description: Attribute ID
+      issuer:
+        type: string
+        description: Issuer
+      includeInResult:
+        type: boolean
+        description: Include in result
+    required:
+      - attributeValues
+      - attributeId
+      - issuer
+      - includeInResult
+  
+  AttributeValueType:
+    type: object
+    properties:
+      content:
+        type: array
+        description: Content
+        items:
+          type: string
+      dataType:
+        type: string
+        description: Data type
+      otherAttributes:
+        type: object
+        description: Other attributes. Can be null
+        additionalProperties:
+          type: string
+    required:
+      - content
+      - dataType
+      - otherAttributes
+  
+  Policy:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Description
+      policyIssuer:
+        $ref: '#/definitions/PolicyIssuer'
+      policyDefaults:
+        $ref: '#/definitions/DefaultsType'
+      target:
+        $ref: '#/definitions/Target'
+      combinerParametersAndRuleCombinerParametersAndVariableDefinitions:
+        type: array
+        description: Combiner parameters and rule combiner parameters and variable definitions.
+        items:
+          $ref: '#/definitions/Rule'
+      obligationExpressions:
+        $ref: '#/definitions/ObligationExpressions'
+      adviceExpressions:
+        $ref: '#/definitions/AdviceExpressions'
+      policyId:
+        type: string
+        description: Policy ID
+      version:  
+        type: string
+        description: Version
+      ruleCombiningAlgId:
+        type: string
+        description: Rule combining algorithm ID
+      maxDelegationDepth:
+        type: number
+        description: Max delegation depth
+    required:
+      - description
+      - policyIssuer
+      - policyDefaults
+      - target
+      - combinerParametersAndRuleCombinerParametersAndVariableDefinitions
+      - obligationExpressions
+      - adviceExpressions
+      - policyId
+      - version
+      - ruleCombiningAlgId
+      - maxDelegationDepth
+        
+  AdviceExpressions:
+    type: object
+    description: Can be null
+    properties:
+      adviceExpressions:
+        type: array
+        description: Advice expressions
+        items:
+          $ref: '#/definitions/AdviceExpression'
+    required:
+      - adviceExpressions
+  
+  AdviceExpression:
+    type: object
+    properties:
+      attributeAssignmentExpressions:
+        type: array
+        description: Attribute assignment expressions
+        items:
+          $ref: '#/definitions/AttributeAssignmentExpression'
+      adviceId:
+        type: string
+        description: Advice ID
+      appliesTo:
+        type: string
+        description: Applies to
+        enum: ['PERMIT', 'DENY']
+    required:
+      - attributeAssignmentExpressions
+      - adviceId
+      - appliesTo
+  
+  ObligationExpressions:
+    type: object
+    description: Can be null
+    properties:
+      obligationExpressions:
+        type: array
+        description: Obligation expressions
+        items:
+          $ref: '#/definitions/ObligationExpression'
+    required:
+      - obligationExpressions
+          
+  ObligationExpression:
+    type: object
+    properties:
+      attributeAssignmentExpressions:
+        type: array
+        description: Attribute assignment expressions
+        items:
+          $ref: '#/definitions/AttributeAssignmentExpression'
+      obligationId:
+        type: string
+        description: Obligation ID
+      fulfillOn:
+        type: string
+        description: Fulfill on
+        enum: ['PERMIT', 'DENY']
+    required:
+      - attributeAssignmentExpressions
+      - obligationId
+      - fulfillOn
+  
+  AttributeAssignmentExpression:
+    type: object
+    properties:
+      expression:
+        type: string
+        description: Expression. Can be null
+      attributeId:
+        type: string
+        description: Attribute ID
+      category:
+        type: string
+        description: Category
+      issuer:
+        type: string
+        description: Issuer
+    required:
+      - expression
+      - attributeId
+      - category
+      - issuer
+  
+  Target:
+    type: object
+    properties:
+      anyOves:
+        type: array
+        description: Any oves
+        items:
+          $ref: '#/definitions/AnyOf'
+    required:
+      - anyOves
+          
+  AnyOf:
+    type: object
+    properties:
+      allOves:
+        type: array
+        description: All oves
+        items:
+          $ref: '#/definitions/AllOf'
+    required:
+      - allOves
+          
+  AllOf:
+    type: object
+    properties:
+      matches:
+        type: array
+        description: Matches
+        items:
+          $ref: '#/definitions/Match'
+    required:
+     - matches
+  
+  Match:
+    type: object
+    properties:
+      attributeValue:
+        $ref: '#/definitions/AttributeValueType'
+      attributeSelector:
+        $ref: '#/definitions/AttributeSelectorType'
+      attributeDesignator:
+        $ref: '#/definitions/AttributeDesignatorType'
+      matchId:
+        type: string
+        description: Match ID
+    required:
+      - attributeValue
+      - attributeSelector
+      - attributeDesignator
+      - matchId
+        
+  AttributeDesignatorType:
+    type: object
+    properties:
+      category:
+        type: string
+        description: Category
+      attributeId:
+        type: string
+        description: Attribute ID
+      dataType:
+        type: string
+        description: Data type
+      issuer:
+        type: string
+        description: Issuer
+      mustBePresent:
+        type: boolean
+        description: Must be present
+    required:
+      - category
+      - attributeId
+      - dataType
+      - issuer
+      - mustBePresent
+  
+  AttributeSelectorType:
+    type: object
+    description: Can be null
+    properties:
+      category:
+        type: string
+        description: Category
+      contextSelectorId:
+        type: string
+        description: Context selector ID
+      path:
+        type: string
+        description: Path
+      dataType:
+        type: string
+        description: Data type
+      mustBePresent:
+        type: boolean
+        description: Must be present
+    required:
+      - category
+      - contextSelectorId
+      - path
+      - dataType
+      - mustBePresent
+        
+  DefaultsType:
+    type: object
+    description: Can be null
+    properties:
+      xPathVersion:
+        type: string
+        description: X path version
+    required:
+      - xPathVersion
+
+  PolicyIssuer:
+    type: object
+    description: Can be null
+    properties:
+      content:
+        $ref: '#/definitions/Content'
+      attributes:
+        type: array
+        description: Attributes
+        items:
+          $ref: '#/definitions/Attribute'
+    required:
+      - content
+      - attributes
+        
+  Content:
+    type: object
+    properties:
+      content:
+        type: array
+        description: Content
+        items:
+          type: string
+    required:
+     - content
+  
+  Rule:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Description
+      target:
+        $ref: '#/definitions/Target'
+      condition:
+        type: string
+        description: Condition
+      obligationExpressions:
+        type: array
+        description: Obligation expressions
+        items:
+          type: string
+      adviceExpressions:
+        type: array
+        description: Advice expressions
+        items:
+          type: string
+      ruleId:
+        type: string
+        description: Rule ID
+      effect:
+        type: string
+        description: Effect
+        enum: ['PERMIT', 'DENY']
+    required:
+      - description
+      - target
+      - condition
+      - obligationExpressions
+      - adviceExpressions
+      - ruleId
+      - effect
+  
+  Error:
+    type: object
+    properties:
+      timestamp:
+        type: string
+        description: Timestamp
+      status:
+        type: number
+        description: HTTP status
+      error:
+        type: string
+        description: HTTP error message
+      message:
+        type: string
+        description: Error message
+    required:
+      - timestamp
+      - status
+      - error
+      - message

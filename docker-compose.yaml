@@ -1,0 +1,18 @@
+version: "3"
+services:
+  policy-tool-service:
+    image: maven:3-openjdk-11
+    container_name: policy-tool-service
+    volumes:
+      - "./:/policy-tool-service"
+    tty: true
+    networks:
+      - uth-network
+    ports:
+      - "8080:8080"
+    working_dir: /policy-tool-service
+    command: /bin/bash
+
+networks:
+  uth-network:
+    name: uth-network

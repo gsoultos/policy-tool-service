@@ -2,6 +2,11 @@
 
 > Policy Tool backend service
 
+# Development instructions
+1. `docker-compose up -d`
+2. `docker container exec -it policy-tool-service /bin/bash`
+3. `mvn install`
+
 # Installation instructions
 
 1. Install Docker
